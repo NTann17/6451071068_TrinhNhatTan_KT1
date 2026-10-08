@@ -85,4 +85,18 @@ public class ForgotPasswordE2ETest extends BaseTest {
                         forgotPasswordPage.getEmailInputType(),
                         "Trường email phải là ô nhập văn bản."));
     }
+
+    @Test
+    @DisplayName("[TC-LOGIN-016] Kiểm tra ảnh mã bảo mật trên trang lấy lại mật khẩu")
+    public void testCaptchaImage() {
+        loginPage.clickForgotPassword();
+
+        Assertions.assertAll(
+                () -> Assertions.assertTrue(forgotPasswordPage.isCaptchaImageDisplayed(),
+                        "Ảnh mã bảo mật phải được hiển thị."),
+                () -> Assertions.assertTrue(
+                        forgotPasswordPage.getCaptchaImageSource()
+                                .contains("/login/index/captcha"),
+                        "Ảnh phải sử dụng endpoint captcha của hệ thống."));
+    }
 }

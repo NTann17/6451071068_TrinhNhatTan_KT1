@@ -20,6 +20,8 @@ public class LoginPage extends BasePage {
                     + ".field-validation-error, [class*='error']");
     private final By forgotPasswordLink = By.cssSelector("a[href*='/Login/GetPass']");
     private final By utcEmailLoginLink = By.cssSelector("a.button");
+    private final By helpCenterLink = By.cssSelector("a[href='http://hotrokythuat.utc.edu.vn']");
+    private final By feedbackLink = By.cssSelector("a[href^='mailto:']");
 
     public LoginPage(WebDriver driver) {
         super(driver);
@@ -83,6 +85,30 @@ public class LoginPage extends BasePage {
 
     public String getPasswordInputType() {
         return waitForVisibility(passwordField).getAttribute("type");
+    }
+
+    public String getUsernameValue() {
+        return waitForVisibility(usernameField).getAttribute("value");
+    }
+
+    public String getPasswordValue() {
+        return waitForVisibility(passwordField).getAttribute("value");
+    }
+
+    public String getHelpCenterHref() {
+        return waitForVisibility(helpCenterLink).getAttribute("href");
+    }
+
+    public String getFeedbackHref() {
+        return waitForVisibility(feedbackLink).getAttribute("href");
+    }
+
+    public boolean isHelpCenterLinkDisplayed() {
+        return isDisplayed(helpCenterLink);
+    }
+
+    public boolean isFeedbackLinkDisplayed() {
+        return isDisplayed(feedbackLink);
     }
 
     public boolean isUsernameFieldDisplayed() {

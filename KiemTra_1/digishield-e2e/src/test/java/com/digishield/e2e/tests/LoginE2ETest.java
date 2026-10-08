@@ -86,6 +86,50 @@ public class LoginE2ETest extends BaseTest {
     }
 
     @Test
+    @DisplayName("[TC-LOGIN-012] Kiểm tra tiêu đề trang đăng nhập")
+    public void testLoginPageTitle() {
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(LoginPage.URL, driver.getCurrentUrl()),
+                () -> Assertions.assertEquals("Đăng nhập", driver.getTitle(),
+                        "Tiêu đề trang đăng nhập không đúng."));
+    }
+
+    @Test
+    @DisplayName("[TC-LOGIN-013] Giá trị nhập vào được giữ trong form đăng nhập")
+    public void testLoginFormRetainsEnteredValues() {
+        loginPage.enterUsername("test.user@example.com");
+        loginPage.enterPassword("TestPassword!123");
+
+        Assertions.assertAll(
+                () -> Assertions.assertEquals("test.user@example.com",
+                        loginPage.getUsernameValue()),
+                () -> Assertions.assertEquals("TestPassword!123",
+                        loginPage.getPasswordValue()));
+    }
+
+    @Test
+    @DisplayName("[TC-LOGIN-014] Thao tác chọn ghi nhớ đăng nhập có tính idempotent")
+    public void testRememberMeSelectionIsIdempotent() {
+        loginPage.selectRememberMe();
+        loginPage.selectRememberMe();
+
+        Assertions.assertTrue(loginPage.isRememberMeSelected(),
+                "Checkbox phải vẫn được chọn sau nhiều lần gọi thao tác chọn.");
+    }
+
+    @Test
+    @DisplayName("[TC-LOGIN-015] Kiểm tra liên kết trợ giúp và phản hồi")
+    public void testSupportLinks() {
+        Assertions.assertAll(
+                () -> Assertions.assertTrue(loginPage.isHelpCenterLinkDisplayed()),
+                () -> Assertions.assertEquals("http://hotrokythuat.utc.edu.vn/",
+                        loginPage.getHelpCenterHref()),
+                () -> Assertions.assertTrue(loginPage.isFeedbackLinkDisplayed()),
+                () -> Assertions.assertEquals("mailto:hotrokythuat@utc.edu.vn",
+                        loginPage.getFeedbackHref()));
+    }
+
+    @Test
     @DisplayName("[TC-LOGIN-008] Đăng nhập thành công với credential do người chạy cung cấp")
     public void testLoginSuccessWithConfiguredCredentials() {
         String username = System.getProperty("username");

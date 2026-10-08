@@ -15,6 +15,7 @@ public class ForgotPasswordPage extends BasePage {
     private final By emailField = By.name("email");
     private final By updateButton = By.cssSelector("input[type='submit']");
     private final By backToLoginLink = By.cssSelector("a[href='/Login']");
+    private final By captchaImage = By.cssSelector("img[src*='/login/index/captcha']");
 
     public ForgotPasswordPage(WebDriver driver) {
         super(driver);
@@ -65,6 +66,14 @@ public class ForgotPasswordPage extends BasePage {
 
     public String getEmailInputType() {
         return waitForVisibility(emailField).getAttribute("type");
+    }
+
+    public boolean isCaptchaImageDisplayed() {
+        return isDisplayed(captchaImage);
+    }
+
+    public String getCaptchaImageSource() {
+        return waitForVisibility(captchaImage).getAttribute("src");
     }
 
     public boolean isOnForgotPasswordPage() {
