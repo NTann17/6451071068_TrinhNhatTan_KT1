@@ -45,4 +45,44 @@ public class ForgotPasswordE2ETest extends BaseTest {
                 () -> Assertions.assertTrue(forgotPasswordPage.isOnForgotPasswordPage(),
                         "Người dùng chưa ở đúng trang quên mật khẩu."));
     }
+
+    @Test
+    @DisplayName("[TC-LOGIN-009] Quay lại trang đăng nhập từ chức năng quên mật khẩu")
+    public void testBackToLogin() {
+        loginPage.clickForgotPassword();
+        forgotPasswordPage.clickBackToLogin();
+
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(LoginPage.URL, driver.getCurrentUrl(),
+                        "Liên kết quay lại phải điều hướng tới trang đăng nhập."),
+                () -> Assertions.assertTrue(loginPage.isLoginPageDisplayed(),
+                        "Form đăng nhập phải hiển thị sau khi quay lại."));
+    }
+
+    @Test
+    @DisplayName("[TC-LOGIN-010] Submit form lấy lại mật khẩu khi bỏ trống thông tin")
+    public void testForgotPasswordEmptyFields() {
+        loginPage.clickForgotPassword();
+        forgotPasswordPage.clickUpdate();
+
+        Assertions.assertAll(
+                () -> Assertions.assertTrue(forgotPasswordPage.isOnForgotPasswordPage(),
+                        "Submit dữ liệu rỗng không được điều hướng khỏi trang lấy lại mật khẩu."),
+                () -> Assertions.assertTrue(forgotPasswordPage.isPageDisplayed(),
+                        "Form lấy lại mật khẩu phải tiếp tục hiển thị để người dùng nhập lại."));
+    }
+
+    @Test
+    @DisplayName("[TC-LOGIN-011] Kiểm tra kiểu dữ liệu các trường lấy lại mật khẩu")
+    public void testForgotPasswordFieldTypes() {
+        loginPage.clickForgotPassword();
+
+        Assertions.assertAll(
+                () -> Assertions.assertEquals("text",
+                        forgotPasswordPage.getSecurityCodeInputType(),
+                        "Trường mã bảo mật phải là ô nhập văn bản."),
+                () -> Assertions.assertEquals("text",
+                        forgotPasswordPage.getEmailInputType(),
+                        "Trường email phải là ô nhập văn bản."));
+    }
 }

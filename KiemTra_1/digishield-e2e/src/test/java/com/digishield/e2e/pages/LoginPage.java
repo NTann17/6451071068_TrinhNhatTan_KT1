@@ -13,6 +13,7 @@ public class LoginPage extends BasePage {
     private final By usernameField = By.name("username");
     private final By passwordField = By.name("userpwd");
     private final By rememberMeCheckbox = By.id("persistent");
+    private final By rememberMeLabel = By.cssSelector("label.check[for='persistent']");
     private final By loginButton = By.cssSelector("input.submit_login");
     private final By validationMessage = By.cssSelector(
             ".alert-danger, .error-message, .validation-summary-errors, "
@@ -42,7 +43,7 @@ public class LoginPage extends BasePage {
 
     public void selectRememberMe() {
         if (!driver.findElement(rememberMeCheckbox).isSelected()) {
-            click(rememberMeCheckbox);
+            click(rememberMeLabel);
         }
     }
 
@@ -74,6 +75,22 @@ public class LoginPage extends BasePage {
 
     public boolean isUtcEmailLoginDisplayed() {
         return isDisplayed(utcEmailLoginLink);
+    }
+
+    public String getUtcEmailLoginHref() {
+        return waitForVisibility(utcEmailLoginLink).getAttribute("href");
+    }
+
+    public String getPasswordInputType() {
+        return waitForVisibility(passwordField).getAttribute("type");
+    }
+
+    public boolean isUsernameFieldDisplayed() {
+        return isDisplayed(usernameField);
+    }
+
+    public boolean isPasswordFieldDisplayed() {
+        return isDisplayed(passwordField);
     }
 
     public boolean isLoginPageDisplayed() {
