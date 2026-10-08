@@ -3,6 +3,8 @@ package com.digishield.e2e.pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import java.util.Locale;
+
 public class ForgotPasswordPage extends BasePage {
 
     public static final String URL =
@@ -41,7 +43,32 @@ public class ForgotPasswordPage extends BasePage {
         return isDisplayed(backToLoginLink);
     }
 
+    public void enterSecurityCode(String securityCode) {
+        type(securityCodeField, securityCode);
+    }
+
+    public void enterEmail(String email) {
+        type(emailField, email);
+    }
+
+    public void clickUpdate() {
+        click(updateButton);
+    }
+
+    public void clickBackToLogin() {
+        click(backToLoginLink);
+    }
+
+    public String getSecurityCodeInputType() {
+        return waitForVisibility(securityCodeField).getAttribute("type");
+    }
+
+    public String getEmailInputType() {
+        return waitForVisibility(emailField).getAttribute("type");
+    }
+
     public boolean isOnForgotPasswordPage() {
-        return getCurrentUrl().equals(URL);
+        return getCurrentUrl().toLowerCase(Locale.ROOT)
+                .endsWith("/login/getpass");
     }
 }

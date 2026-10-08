@@ -36,7 +36,7 @@ public class LoginE2ETest extends BaseTest {
     }
 
     @Test
-    @DisplayName("Hiển thị đúng các thành phần hỗ trợ đăng nhập")
+    @DisplayName("[TC-LOGIN-003] Hiển thị đúng các thành phần hỗ trợ đăng nhập")
     public void testLoginPageActionsAreAvailable() {
         Assertions.assertAll(
                 () -> Assertions.assertTrue(loginPage.isLoginPageDisplayed()),
@@ -45,7 +45,48 @@ public class LoginE2ETest extends BaseTest {
     }
 
     @Test
-    @DisplayName("Đăng nhập thành công với credential do người chạy cung cấp")
+    @DisplayName("[TC-LOGIN-004] Chọn tùy chọn ghi nhớ đăng nhập")
+    public void testRememberMeCanBeSelected() {
+        Assertions.assertFalse(loginPage.isRememberMeSelected(),
+                "Tùy chọn ghi nhớ đăng nhập phải bỏ chọn khi mới mở trang.");
+
+        loginPage.selectRememberMe();
+
+        Assertions.assertTrue(loginPage.isRememberMeSelected(),
+                "Tùy chọn ghi nhớ đăng nhập phải được chọn sau khi người dùng thao tác.");
+    }
+
+    @Test
+    @DisplayName("[TC-LOGIN-005] Kiểm tra liên kết đăng nhập bằng e-mail UTC")
+    public void testUtcEmailLoginLink() {
+        Assertions.assertTrue(loginPage.isUtcEmailLoginDisplayed(),
+                "Liên kết đăng nhập bằng e-mail UTC phải được hiển thị.");
+        Assertions.assertTrue(loginPage.getUtcEmailLoginHref().startsWith(
+                        "https://accounts.google.com/o/oauth2/auth"),
+                "Liên kết e-mail UTC phải trỏ tới luồng OAuth của Google.");
+    }
+
+    @Test
+    @DisplayName("[TC-LOGIN-006] Đăng nhập với thông tin không hợp lệ vẫn ở trang đăng nhập")
+    public void testLoginFailure_InvalidCredentials() {
+        loginPage.login("automation.invalid@example.com", "WrongPassword!123");
+
+        Assertions.assertAll(
+                () -> Assertions.assertTrue(loginPage.isOnLoginPage(),
+                        "Đăng nhập sai không được điều hướng khỏi trang đăng nhập."),
+                () -> Assertions.assertTrue(loginPage.isLoginPageDisplayed(),
+                        "Form đăng nhập phải tiếp tục khả dụng sau khi đăng nhập sai."));
+    }
+
+    @Test
+    @DisplayName("[TC-LOGIN-007] Mật khẩu được hiển thị dưới dạng ký tự ẩn")
+    public void testPasswordFieldIsMasked() {
+        Assertions.assertEquals("password", loginPage.getPasswordInputType(),
+                "Trường mật khẩu phải sử dụng kiểu password.");
+    }
+
+    @Test
+    @DisplayName("[TC-LOGIN-008] Đăng nhập thành công với credential do người chạy cung cấp")
     public void testLoginSuccessWithConfiguredCredentials() {
         String username = System.getProperty("username");
         String password = System.getProperty("password");
